@@ -10,12 +10,13 @@ var url = require('url'),
     http = require('http'),
     serialport = require("serialport"),
     SerialPort = serialport.SerialPort;
-querystring = require('qs')
+    querystring = require('qs')
 
+var util = require('util');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
 var xbeeAPI = new xbee_api.XBeeAPI({
-    api_mode: 1
+    api_mode: 2
 });
 
 DOOR = 0;
@@ -55,6 +56,11 @@ port.on("open", function () {
     port.on('data', xbeeMsgHandlerFn)
 });
 
+// All frames parsed by the XBee will be emitted here
+xbeeAPI.on("frame_object", xbeeMsgHandlerFn); /*function (frame) {
+    console.log(">>", frame);
+});*/
+
 function httpReqHandlerFn(request, response){
     setHeaders(response);
 
@@ -67,9 +73,9 @@ function httpReqHandlerFn(request, response){
 
     } else if (request.method == 'POST') {
         var command = constructCommand(request);
-        console.log('WRITING COMMAND: "' + stringEscape(command) + '"');
+        console.log('WRITING COMMAND: "' + (command.data) + '"');
 
-        port.write(command);
+        port.write(xbeeAPI.buildFrame(command));
         /*port.write(command, function(err, results) {
 
             if (err) {
@@ -87,8 +93,15 @@ function constructCommand(request, response) {
     /*var parsed = url.parse(request.url, true),
         value = parsed.query.value;*/
     var value = request.url.split("/")[1].split("=")[1];
+    var frame_obj = {
+        type: 0x10,
+        id: 0x4D2,
+        broadcastRadius: 0xFFFF,
+        options: 0x00,
+        data: value
+    };
     if (m = request.url.match(patterns.requests.temp)) {
-        return value;
+        return frame_obj;
     } else if (m = request.url.match(patterns.requests.light)) {
         return 'L'+value+'\n';
     } else if (m = request.url.match(patterns.requests.door)) {
@@ -121,32 +134,36 @@ function stringEscape(str) {
 
 
 
-function xbeeMsgHandlerFn(data) {
-    //console.log(data);
+function xbeeMsgHandlerFn(data_raw) {
 
-    // write data to request body
+    if (data_raw.data == undefined)
+        return;
+    data = data_raw.data.toString();
+
 
     splitted_data = data.split(" ")
     console.log(splitted_data[1]);
     console.log(splitted_data[2]);
 
-    /*if (m = data.match(testPatterns.messages.cao)) {
-     TEMP = 1337;
-     } else if (m = data.match(testPatterns.messages.hello)) {
-     LIGHT = 7331;
-     } else {
-     DOOR = 1;
-     }*/
+
+    if (splitted_data[1] = "T") {
+        var post_path = "/temperatures";
+    }
+    else if (splitted_data[1] = "D") {
+        post_path = "/doors";
+    }
+
     var postData = JSON.stringify({
         'value' : splitted_data[4],
         'room_id' : '1'
     });
 
 
+
     var options = {
         hostname: RAILS_SERVER,
         port: RAILS_PORT,
-        path: '/temperatures',
+        path: post_path,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -173,14 +190,5 @@ function xbeeMsgHandlerFn(data) {
 
     req.write(postData);
     req.end();
-    /*
-     if (r = data.match(patterns.temp)) {
-     TEMP = parseInt(r[1], 10);
-     } else if (r = data.match(patterns.light)) {
-     LIGHT = parseInt(r[1], 10);
-     } else if (r = data.match(patterns.door)) {
-     LIGHT = parseInt(r[1], 10);
-     }
-     */
 
 }
