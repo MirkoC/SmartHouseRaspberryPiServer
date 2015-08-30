@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cab3fb21-fbf8-4f33-b27c-5bda2a8607b4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/SmartHouseRaspberryPiServer_node_modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/smart_house_rpi_server.js" afterPath="$PROJECT_DIR$/smart_house_rpi_server.js" />
     </list>
     <ignored path="SmartHouseRaspberryPiServer.iws" />
@@ -31,8 +29,8 @@
       <file leaf-file-name="smart_house_rpi_server.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/smart_house_rpi_server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3577348">
-              <caret line="138" column="34" selection-start-line="138" selection-start-column="34" selection-end-line="138" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.6685083">
+              <caret line="159" column="24" selection-start-line="159" selection-start-column="24" selection-end-line="159" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -182,8 +180,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/smart_house_rpi_server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3577348">
-          <caret line="138" column="34" selection-start-line="138" selection-start-column="34" selection-end-line="138" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.6685083">
+          <caret line="159" column="24" selection-start-line="159" selection-start-column="24" selection-end-line="159" selection-end-column="24" />
           <folding />
         </state>
       </provider>

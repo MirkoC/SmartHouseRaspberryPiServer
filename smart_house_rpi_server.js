@@ -148,14 +148,16 @@ function xbeeMsgHandlerFn(data_raw) {
 
     if (splitted_data[1] = "T") {
         var post_path = "/temperatures";
+        var room = 1;
     }
     else if (splitted_data[1] = "D") {
         post_path = "/doors";
+        var room = 2;
     }
 
     var postData = JSON.stringify({
         'value' : splitted_data[4],
-        'room_id' : '1'
+        'room_id' : room
     });
 
 
