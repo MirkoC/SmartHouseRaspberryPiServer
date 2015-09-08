@@ -15,6 +15,7 @@ var url = require('url'),
 var util = require('util');
 var xbee_api = require('xbee-api');
 var C = xbee_api.constants;
+
 var xbeeAPI = new xbee_api.XBeeAPI({
     api_mode: 2
 });
@@ -105,7 +106,7 @@ function constructCommand(request, response) {
     } else if (m = request.url.match(patterns.requests.light)) {
         return 'L'+value+'\n';
     } else if (m = request.url.match(patterns.requests.door)) {
-        return 'D'+value+'\n';
+        return frame_obj;
     }
 }
 
